@@ -10,11 +10,26 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0"/>
-        <PackageReference Include="NUnit" Version="3.13.3"/>
-        <PackageReference Include="NUnit3TestAdapter" Version="4.4.2"/>
-        <PackageReference Include="NUnit.Analyzers" Version="3.6.1"/>
-        <PackageReference Include="coverlet.collector" Version="3.2.0"/>
+        <PackageReference Include="microsoft.EntityFrameworkCore" Version="6.0.6" />
+        <PackageReference Include="microsoft.EntityFrameworkCore.InMemory" Version="6.0.6" />
+        <PackageReference Include="microsoft.EntityFrameworkCore.Proxies" Version="6.0.6" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+        <PackageReference Include="Moq" Version="4.18.1" />
+        <PackageReference Include="Shouldly" Version="4.0.3" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="Xunit.DependencyInjection" Version="8.5.0" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="coverlet.collector" Version="3.1.0">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Library\Tp24.Application\Tp24.Application.csproj" />
     </ItemGroup>
 
 </Project>
