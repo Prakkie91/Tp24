@@ -38,7 +38,10 @@ public class AddReceivablesCommandHandlerTests
         _debtorRepositoryMock.Setup(r => r.FindByReferenceAsync(It.IsAny<string>())).ReturnsAsync(existingDebtor);
         _receivableRepositoryMock.Setup(r => r.FindByReferenceAsync(It.IsAny<string>()))
             .ReturnsAsync((ReceivableDomainModel)null);
-
+        
+        _receivableRepositoryMock.Setup(r => r.AddAsync(It.IsAny<ReceivableDomainModel>()))
+            .ReturnsAsync(ReceivableTestDataFactory.CreateReceivableDomainModel());
+        
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -57,6 +60,9 @@ public class AddReceivablesCommandHandlerTests
             .ReturnsAsync((DebtorDomainModel)null);
         _receivableRepositoryMock.Setup(r => r.FindByReferenceAsync(It.IsAny<string>()))
             .ReturnsAsync((ReceivableDomainModel)null);
+        
+        _receivableRepositoryMock.Setup(r => r.AddAsync(It.IsAny<ReceivableDomainModel>()))
+            .ReturnsAsync(ReceivableTestDataFactory.CreateReceivableDomainModel());
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);

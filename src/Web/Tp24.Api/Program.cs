@@ -16,24 +16,24 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddControllers()
         .AddFluentValidation()
         .ConfigureApiBehaviorOptions(options =>
-    {
-        options.InvalidModelStateResponseFactory = context =>
         {
-            var errors = context.ModelState
-                .Where(e => e.Value.Errors.Count > 0)
-                .SelectMany(x => x.Value.Errors)
-                .Select(x => x.ErrorMessage)
-                .ToList();
-
-            var result = new Result
+            options.InvalidModelStateResponseFactory = context =>
             {
-                Succeeded = false,
-                Messages = errors
-            };
+                var errors = context.ModelState
+                    .Where(e => e.Value.Errors.Count > 0)
+                    .SelectMany(x => x.Value.Errors)
+                    .Select(x => x.ErrorMessage)
+                    .ToList();
 
-            return new BadRequestObjectResult(result);
-        };
-    });
+                var result = new Result
+                {
+                    Succeeded = false,
+                    Messages = errors
+                };
+
+                return new BadRequestObjectResult(result);
+            };
+        });
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.RegisterSwagger();
 }
@@ -67,7 +67,7 @@ app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
 
-namespace Tp24API
+namespace Tp24.Api
 {
     public class Program
     {

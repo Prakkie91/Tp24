@@ -7,10 +7,7 @@ public class AutoMapperFixture
 {
     public AutoMapperFixture()
     {
-        Configuration = new MapperConfiguration(cfg =>
-        {
-            cfg.AddMaps(typeof(DebtorProfile).Assembly);
-        });
+        Configuration = new MapperConfiguration(cfg => { cfg.AddMaps(typeof(DebtorProfile).Assembly); });
 
         Mapper = Configuration.CreateMapper();
     }

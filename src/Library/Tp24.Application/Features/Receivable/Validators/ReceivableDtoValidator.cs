@@ -35,9 +35,6 @@ public class ReceivableDtoValidator : AbstractValidator<ReceivableDto>
             .LessThanOrEqualTo(DateTime.Now).When(x => x.ClosedDate.HasValue)
             .WithMessage("Closed date should not be in the future.");
 
-        RuleFor(x => x.Cancelled)
-            .NotNull().WithMessage("Cancelled status must be specified.");
-
         RuleFor(x => x.DebtorName)
             .NotEmpty()
             .MaximumLength(255).WithMessage("Debtor name should not exceed 255 characters.");

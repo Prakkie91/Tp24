@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.Testing;
+using Tp24.Api;
 using Tp24.IntegrationTest.Fixtures;
-using Tp24API;
 using Xunit;
 
 namespace Tp24.IntegrationTest.Shared;

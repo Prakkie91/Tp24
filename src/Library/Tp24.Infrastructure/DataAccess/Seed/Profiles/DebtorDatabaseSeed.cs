@@ -9,20 +9,20 @@ public class DebtorDatabaseSeed : IDatabaseSeed
 
     public async Task SeedAsync(Tp24DbContext context)
     {
-        // Debtors for USA
+        // Debtors for US
         var johnDoeCorp = new DebtorDataModel
         {
             Id = DebtorIds.JohnDoeCorp,
             Name = "John Doe Corp",
             Reference = "JD-001",
-            CountryCode = "USA"
+            CountryCode = "US"
         };
         var smithInc = new DebtorDataModel
         {
             Id = DebtorIds.SmithInc,
             Name = "Smith Inc",
             Reference = "SI-002",
-            CountryCode = "USA"
+            CountryCode = "US"
         };
 
         // Debtors for Sweden
@@ -41,7 +41,7 @@ public class DebtorDatabaseSeed : IDatabaseSeed
 
     public static class DebtorIds
     {
-        // Debtors for USA
+        // Debtors for US
         public static readonly Guid JohnDoeCorp = new("01234567-0123-0123-0123-0123456789AB");
         public static readonly Guid SmithInc = new("12345678-1234-1234-1234-1234567890BC");
 

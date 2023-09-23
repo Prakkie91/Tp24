@@ -30,16 +30,18 @@ public static class ExceptionMiddlewareExtensions
                     switch (ctx.Response.StatusCode)
                     {
                         case (int)HttpStatusCode.BadRequest:
-                            var errorResponse = JsonSerializer.Deserialize<Dictionary<string, object>>(await new StreamReader(ctx.Response.Body).ReadToEndAsync());
+                            var errorResponse =
+                                JsonSerializer.Deserialize<Dictionary<string, object>>(
+                                    await new StreamReader(ctx.Response.Body).ReadToEndAsync());
                             if (errorResponse.ContainsKey("errors"))
                             {
                                 var errorDetails = errorResponse["errors"] as Dictionary<string, object>;
                                 errors = new List<string>();
                                 foreach (var error in errorDetails)
-                                {
-                                    errors.AddRange(((JsonElement)error.Value).EnumerateArray().Select(e => e.GetString()));
-                                }
+                                    errors.AddRange(((JsonElement)error.Value).EnumerateArray()
+                                        .Select(e => e.GetString()));
                             }
+
                             resultMessage = "Validation failed";
                             break;
 
@@ -48,7 +50,9 @@ public static class ExceptionMiddlewareExtensions
                             break;
                     }
 
-                    var response = errors != null ? await Result.FailAsync(errors) : await Result.FailAsync(resultMessage);
+                    var response = errors != null
+                        ? await Result.FailAsync(errors)
+                        : await Result.FailAsync(resultMessage);
                     await ctx.Response.WriteAsync(JsonSerializer.Serialize(response, SerializerOptions));
                 }
             });

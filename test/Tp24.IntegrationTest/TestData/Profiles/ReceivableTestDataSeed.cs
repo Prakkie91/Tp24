@@ -17,7 +17,7 @@ public class ReceivableTestDataSeed : ITestDataSeed
         var receivable1 = new ReceivableDataModel
         {
             Id = ReceivableIds.Receivable1,
-            Reference = "JD-R001",
+            Reference = ReceivableReferences.ReceivableReference1,
             CurrencyCode = "USD",
             IssueDate = new DateTime(2023, 1, 1),
             OpeningValue = 1000.00M,
@@ -30,7 +30,7 @@ public class ReceivableTestDataSeed : ITestDataSeed
         var receivable2 = new ReceivableDataModel
         {
             Id = ReceivableIds.Receivable2,
-            Reference = "SI-R002",
+            Reference = ReceivableReferences.ReceivableReference2,
             CurrencyCode = "USD",
             IssueDate = new DateTime(2023, 1, 15),
             OpeningValue = 2000.00M,
@@ -91,5 +91,11 @@ public class ReceivableTestDataSeed : ITestDataSeed
     {
         public static readonly Guid Receivable1 = new("8D8F9F9A-BCDA-4BFC-9ABD-02E2D8C9E234");
         public static readonly Guid Receivable2 = new("3A2D6BCD-ED56-4D67-8F9D-6E7E8A9B3DEF");
+    }
+    
+    public static class ReceivableReferences
+    {
+        public const string ReceivableReference1 = "JD-R001";
+        public const string ReceivableReference2 = "SI-R002";
     }
 }

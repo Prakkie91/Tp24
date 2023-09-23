@@ -20,16 +20,16 @@ public class ReceivableDomainModel : BaseDomainModel
         SetDebtor(debtor);
     }
 
-    public string Reference { get; private set; }
-    public string CurrencyCode { get; private set; }
-    public DateTime IssueDate { get; private set; }
-    public decimal OpeningValue { get; private set; }
-    public decimal PaidValue { get; private set; }
-    public DateTime DueDate { get; private set; }
+    public string Reference { get; set; }
+    public string CurrencyCode { get; set; }
+    public DateTime IssueDate { get; set; }
+    public decimal OpeningValue { get; set; }
+    public decimal PaidValue { get; set; }
+    public DateTime DueDate { get; set; }
     public DateTime? ClosedDate { get; }
     public bool Cancelled { get; }
-    public DebtorDomainModel Debtor { get; private set; }
-    public Guid DebtorId { get; private set; }
+    public DebtorDomainModel Debtor { get; set; }
+    public Guid DebtorId { get; set; }
 
     private void SetReference(string reference)
     {

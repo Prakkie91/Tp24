@@ -29,7 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Library\Tp24.Application\Tp24.Application.csproj" />
+        <ProjectReference Include="..\..\src\Library\Tp24.Application\Tp24.Application.csproj" />
     </ItemGroup>
 
 </Project>

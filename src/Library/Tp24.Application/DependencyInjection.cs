@@ -10,7 +10,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-         services.AddValidatorsFromAssemblyContaining<ReceivableDtoValidator>();
+        services.AddValidatorsFromAssemblyContaining<ReceivableDtoValidator>();
         return services.AddMediatR(typeof(AddReceivablesCommand).Assembly);
     }
 }

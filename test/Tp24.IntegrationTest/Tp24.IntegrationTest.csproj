@@ -26,6 +26,6 @@
         <ProjectReference Include="..\..\src\Web\Tp24.Api\Tp24.Api.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Helper\" />
+        <Folder Include="Helper\" />
     </ItemGroup>
 </Project>

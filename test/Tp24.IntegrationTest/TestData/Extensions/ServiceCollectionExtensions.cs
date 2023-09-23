@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using Tp24.Infrastructure.DataAccess.Seed.Profiles;
 using Tp24.IntegrationTest.TestData.Interfaces;
 using Tp24.IntegrationTest.TestData.Profiles;
 

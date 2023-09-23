@@ -46,6 +46,16 @@ public class ReceivableRepository : IReceivableRepository
         return entity != null ? _mapper.Map<ReceivableDomainModel>(entity) : null;
     }
 
+    public async Task<List<ReceivableDomainModel>> FindByReferencesAsync(IEnumerable<string> references)
+    {
+        var entities = await _dbContext.Receivables
+            .Where(r => references.Contains(r.Reference))
+            .ToListAsync();
+
+        return _mapper.Map<List<ReceivableDomainModel>>(entities);
+    }
+
+
     public async Task<ReceivablesSummaryDomainModel> GetReceivablesSummaryAsync()
     {
         var today = DateTime.Today;

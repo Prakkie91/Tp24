@@ -1,5 +1,6 @@
 using MediatR;
 using Tp24.Application.Features.Receivable.Commands;
+using Tp24.Application.Features.Receivable.Responses;
 using Tp24.Common.Wrappers;
 using Tp24.Core.Domain.Entities;
 using Tp24.Core.Interfaces.Repositories;
@@ -10,7 +11,9 @@ namespace Tp24.Application.Features.Receivable.Handlers;
 ///     Handles the addition of a batch of receivables.
 ///     This handler ensures that new debtors are added to the system and then processes and inserts the receivables.
 /// </summary>
-public class AddReceivablesBatchCommandHandler : IRequestHandler<AddReceivablesBatchCommand, IResult>
+public class
+    AddReceivablesBatchCommandHandler : IRequestHandler<AddReceivablesBatchCommand,
+        IResult<AddReceivablesBatchResponse>>
 {
     private readonly IDebtorRepository _debtorRepository;
     private readonly IReceivableRepository _receivableRepository;
@@ -33,8 +36,11 @@ public class AddReceivablesBatchCommandHandler : IRequestHandler<AddReceivablesB
     /// <param name="request">Request containing receivables data.</param>
     /// <param name="cancellationToken">Token for task cancellation.</param>
     /// <returns>Result indicating the outcome of the batch processing.</returns>
-    public async Task<IResult> Handle(AddReceivablesBatchCommand request, CancellationToken cancellationToken)
+    public async Task<IResult<AddReceivablesBatchResponse>> Handle(AddReceivablesBatchCommand request,
+        CancellationToken cancellationToken)
     {
+        var response = new AddReceivablesBatchResponse();
+
         // Extract unique debtors from the request.
         var uniqueDebtors = GetUniqueDebtors(request.Receivables);
 
@@ -48,14 +54,24 @@ public class AddReceivablesBatchCommandHandler : IRequestHandler<AddReceivablesB
         // Add new debtors to the system.
         var addedDebtors = await _debtorRepository.AddRangeAsync(MapToDebtorDomainModels(newDebtorsToAdd));
 
+        // Get the list of already existing receivable references
+        var existingReceivables =
+            await _receivableRepository.FindByReferencesAsync(request.Receivables.Select(r => r.Reference));
+
         // Prepare receivables for insertion.
-        var receivablesToInsert = PrepareReceivablesForInsertion(request.Receivables, addedDebtors, existingDebtors);
+        var preparationResult = PrepareReceivablesForInsertion(request.Receivables, addedDebtors, existingDebtors,
+            existingReceivables.Select(a => a.Reference));
 
-        // Add the receivables to the system.
-        await _receivableRepository.AddRangeAsync(receivablesToInsert);
+        await _receivableRepository.AddRangeAsync(preparationResult.ReceivablesToInsert);
 
-        return await Result.SuccessAsync("Batch processed successfully.");
+        response.SuccessCount = preparationResult.ReceivablesToInsert.Count;
+        response.DuplicatesCount = preparationResult.DuplicatesCount;
+        response.ExistingCount = preparationResult.ExistingCount;
+        response.TotalProcessed = request.Receivables.Count;
+
+        return await Result<AddReceivablesBatchResponse>.SuccessAsync(response, "Batch processed successfully.");
     }
+
 
     /// <summary>
     ///     Extracts unique debtors from the list of receivables.
@@ -104,13 +120,26 @@ public class AddReceivablesBatchCommandHandler : IRequestHandler<AddReceivablesB
     /// <param name="receivableDtos">List of receivable DTOs.</param>
     /// <param name="newlyAdded">List of newly added debtors.</param>
     /// <param name="existingDebtors">List of debtors that already exist in the system.</param>
+    /// <param name="existingReceivableReferences"></param>
     /// <returns>List of receivables ready for insertion.</returns>
-    private List<ReceivableDomainModel> PrepareReceivablesForInsertion(List<ReceivableDto> receivableDtos,
-        List<DebtorDomainModel> newlyAdded, List<DebtorDomainModel> existingDebtors)
+    private (List<ReceivableDomainModel> ReceivablesToInsert, int DuplicatesCount, int ExistingCount)
+        PrepareReceivablesForInsertion(
+            List<ReceivableDto> receivableDtos,
+            List<DebtorDomainModel> newlyAdded,
+            List<DebtorDomainModel> existingDebtors,
+            IEnumerable<string> existingReceivableReferences)
     {
         var receivables = new List<ReceivableDomainModel>();
+        var duplicatesCount = receivableDtos.Count - receivableDtos.Select(r => r.Reference).Distinct().Count();
+        var existingCount = receivableDtos.Count(r => existingReceivableReferences.Contains(r.Reference));
 
-        foreach (var dto in receivableDtos)
+        // Filter out duplicates and existing receivables
+        var uniqueReceivables = receivableDtos
+            .Where(r => !existingReceivableReferences.Contains(r.Reference))
+            .GroupBy(r => r.Reference)
+            .Select(g => g.First()).ToList();
+
+        foreach (var dto in uniqueReceivables)
         {
             var debtor = newlyAdded.FirstOrDefault(d => d.Reference == dto.DebtorReference)
                          ?? existingDebtors.FirstOrDefault(d => d.Reference == dto.DebtorReference);
@@ -127,6 +156,6 @@ public class AddReceivablesBatchCommandHandler : IRequestHandler<AddReceivablesB
             receivables.Add(receivable);
         }
 
-        return receivables;
+        return (receivables, duplicatesCount, existingCount);
     }
 }

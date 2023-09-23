@@ -1,12 +1,10 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Tp24.Application.Features.Receivable.Queries;
-using IResult = Tp24.Common.Wrappers.IResult;
-using System.Collections.Generic;
 using Tp24.Application.Features.Receivable.Commands;
+using Tp24.Application.Features.Receivable.Queries;
 using Tp24.Application.Features.Receivable.Responses;
 using Tp24.Common.Wrappers;
+using IResult = Tp24.Common.Wrappers.IResult;
 
 namespace Tp24.Api.Controllers.v1;
 
@@ -40,7 +38,7 @@ public class ReceivableController : BaseApiController<ReceivableController>
     /// <param name="request">The command model containing the receivable details.</param>
     /// <returns>Confirmation of the stored data.</returns>
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IResult))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IResult<Guid>))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IResult))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(IResult))]
     public async Task<IActionResult> AddReceivable([FromBody] AddReceivablesCommand request)
@@ -49,10 +47,10 @@ public class ReceivableController : BaseApiController<ReceivableController>
         if (result.Succeeded) return Ok(result);
         return BadRequest(result);
     }
-    
-    
+
+
     [HttpPost("batch")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IResult))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IResult<AddReceivablesBatchResponse>))]
     [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IResult))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(IResult))]
     public async Task<IActionResult> AddReceivablesBatch([FromBody] AddReceivablesBatchCommand request)

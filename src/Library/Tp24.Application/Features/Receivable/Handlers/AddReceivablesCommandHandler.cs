@@ -10,7 +10,7 @@ namespace Tp24.Application.Features.Receivable.Handlers;
 /// <summary>
 ///     Handler for adding receivables.
 /// </summary>
-public class AddReceivablesCommandHandler : IRequestHandler<AddReceivablesCommand, IResult>
+public class AddReceivablesCommandHandler : IRequestHandler<AddReceivablesCommand, IResult<Guid>>
 {
     private readonly IDebtorRepository _debtorRepository;
     private readonly ILogger<AddReceivablesCommandHandler> _logger;
@@ -38,7 +38,7 @@ public class AddReceivablesCommandHandler : IRequestHandler<AddReceivablesComman
     /// <param name="request">The request to add a new receivable.</param>
     /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
     /// <returns>A result indicating success or failure of the operation.</returns>
-    public async Task<IResult> Handle(AddReceivablesCommand request, CancellationToken cancellationToken)
+    public async Task<IResult<Guid>> Handle(AddReceivablesCommand request, CancellationToken cancellationToken)
     {
         // Determine if a debtor exists, or create a new one.
         var debtor = await GetOrCreateDebtorAsync(request);
@@ -48,7 +48,8 @@ public class AddReceivablesCommandHandler : IRequestHandler<AddReceivablesComman
         if (existingReceivable != null)
         {
             _logger.LogWarning("Receivable with reference {RequestReference} already exists", request.Reference);
-            return await Result.FailAsync("Receivable with the same reference already exists. No changes were made.");
+            return await Result<Guid>.FailAsync(
+                "Receivable with the same reference already exists. No changes were made.");
         }
 
         // Create and persist a new receivable.
@@ -61,10 +62,10 @@ public class AddReceivablesCommandHandler : IRequestHandler<AddReceivablesComman
             request.DueDate,
             debtor);
 
-        await _receivableRepository.AddAsync(receivable);
+        var result = await _receivableRepository.AddAsync(receivable);
         _logger.LogInformation("Receivable with reference {RequestReference} added successfully", request.Reference);
 
-        return await Result.SuccessAsync("Receivable added successfully.");
+        return await Result<Guid>.SuccessAsync(result.Id, "Receivable added successfully.");
     }
 
     /// <summary>

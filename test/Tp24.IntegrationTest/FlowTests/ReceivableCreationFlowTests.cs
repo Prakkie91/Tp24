@@ -1,6 +1,6 @@
 namespace Tp24.IntegrationTest.FlowTests;
 
-public class BeneficiaryCreationFlowTests
+public class ReceivableCreationFlowTests
 {
     //TODO
 }

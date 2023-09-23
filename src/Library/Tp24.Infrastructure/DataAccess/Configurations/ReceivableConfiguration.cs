@@ -14,7 +14,7 @@ public class ReceivableConfiguration : IEntityTypeConfiguration<ReceivableDataMo
         // Property Configurations
         builder.Property(r => r.Reference)
             .IsRequired()
-            .HasMaxLength(255);
+            .HasMaxLength(50);
 
         builder.Property(r => r.CurrencyCode)
             .IsRequired()
