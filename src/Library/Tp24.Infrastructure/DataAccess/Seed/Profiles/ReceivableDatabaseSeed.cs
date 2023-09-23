@@ -21,7 +21,7 @@ public class ReceivableDatabaseSeed : IDatabaseSeed
             OpeningValue = 1000.00M,
             PaidValue = 500.00M,
             DueDate = new DateTime(2023, 2, 1),
-            DebtorId = DebtorDataModelSeed.DebtorIds.JohnDoeCorp
+            DebtorId = DebtorDatabaseSeed.DebtorIds.JohnDoeCorp
         };
 
         // Receivables for Smith Inc
@@ -34,7 +34,7 @@ public class ReceivableDatabaseSeed : IDatabaseSeed
             OpeningValue = 2000.00M,
             PaidValue = 1000.00M,
             DueDate = new DateTime(2023, 2, 15),
-            DebtorId = DebtorDataModelSeed.DebtorIds.SmithInc
+            DebtorId = DebtorDatabaseSeed.DebtorIds.SmithInc
         };
 
         var receivables = GenerateRandomReceivables(200);
@@ -65,8 +65,8 @@ public class ReceivableDatabaseSeed : IDatabaseSeed
                 PaidValue = paidValue,
                 DueDate = issueDate.AddMonths(1),
                 DebtorId = i % 2 == 0
-                    ? DebtorDataModelSeed.DebtorIds.JohnDoeCorp
-                    : DebtorDataModelSeed.DebtorIds.SmithInc
+                    ? DebtorDatabaseSeed.DebtorIds.JohnDoeCorp
+                    : DebtorDatabaseSeed.DebtorIds.SmithInc
             });
         }
 

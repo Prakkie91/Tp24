@@ -49,4 +49,16 @@ public class ReceivableController : BaseApiController<ReceivableController>
         if (result.Succeeded) return Ok(result);
         return BadRequest(result);
     }
+    
+    
+    [HttpPost("batch")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IResult))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(IResult))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(IResult))]
+    public async Task<IActionResult> AddReceivablesBatch([FromBody] AddReceivablesBatchCommand request)
+    {
+        var result = await Mediator.Send(request);
+        if (result.Succeeded) return Ok(result);
+        return BadRequest(result);
+    }
 }

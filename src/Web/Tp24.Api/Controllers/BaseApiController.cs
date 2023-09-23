@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Tp24.Api.Filters;
 
 namespace Tp24.Api.Controllers;
 
@@ -8,6 +9,7 @@ namespace Tp24.Api.Controllers;
 /// <typeparam name="T"></typeparam>
 [ApiController]
 [Produces("application/json")]
+[ValidateApiModelState]
 public abstract class BaseApiController<T> : ControllerBase
 {
     /// <summary>

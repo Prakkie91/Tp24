@@ -1,11 +1,12 @@
 using Tp24.Core.Domain.Entities;
 
-namespace Tp24.Core.Interfaces.Repositories;
-
-public interface IReceivableRepository
+namespace Tp24.Core.Interfaces.Repositories
 {
-    Task<ReceivableDomainModel> AddAsync(ReceivableDomainModel receivable);
-    Task<ReceivableDomainModel?> FindByReferenceAsync(string reference);
-    Task<ReceivablesSummaryDomainModel> GetReceivablesSummaryAsync();
-
+    public interface IReceivableRepository
+    {
+        Task<ReceivableDomainModel> AddAsync(ReceivableDomainModel receivable);
+        Task<List<ReceivableDomainModel>> AddRangeAsync(IEnumerable<ReceivableDomainModel> receivables);
+        Task<ReceivableDomainModel?> FindByReferenceAsync(string reference);
+        Task<ReceivablesSummaryDomainModel> GetReceivablesSummaryAsync();
+    }
 }

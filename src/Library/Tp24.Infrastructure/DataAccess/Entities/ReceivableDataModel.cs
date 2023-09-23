@@ -14,7 +14,7 @@ public class ReceivableDataModel : BaseEntity
     ///     Gets or sets the reference number or code for the receivable.
     /// </summary>
     [Required]
-    [MaxLength(255)]
+    [MaxLength(50)]
     public string Reference { get; set; }
 
     /// <summary>

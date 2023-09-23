@@ -8,7 +8,7 @@ internal static class ServiceCollectionExtensions
 {
     internal static IServiceCollection RegisterDatabaseSeeders(this IServiceCollection services)
     {
-        services.AddTransient<IDatabaseSeed, DebtorDataModelSeed>();
+        services.AddTransient<IDatabaseSeed, DebtorDatabaseSeed>();
         services.AddTransient<IDatabaseSeed, ReceivableDatabaseSeed>();
 
         return services;

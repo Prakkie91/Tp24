@@ -25,16 +25,30 @@ public static class ExceptionMiddlewareExtensions
                 if (exception != null)
                 {
                     string resultMessage;
+                    List<string> errors = null;
 
-                    switch (exception.Error)
+                    switch (ctx.Response.StatusCode)
                     {
+                        case (int)HttpStatusCode.BadRequest:
+                            var errorResponse = JsonSerializer.Deserialize<Dictionary<string, object>>(await new StreamReader(ctx.Response.Body).ReadToEndAsync());
+                            if (errorResponse.ContainsKey("errors"))
+                            {
+                                var errorDetails = errorResponse["errors"] as Dictionary<string, object>;
+                                errors = new List<string>();
+                                foreach (var error in errorDetails)
+                                {
+                                    errors.AddRange(((JsonElement)error.Value).EnumerateArray().Select(e => e.GetString()));
+                                }
+                            }
+                            resultMessage = "Validation failed";
+                            break;
+
                         default:
-                            ctx.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                             resultMessage = "An unexpected error occurred. Please try again later.";
                             break;
                     }
 
-                    var response = await Result.FailAsync(resultMessage);
+                    var response = errors != null ? await Result.FailAsync(errors) : await Result.FailAsync(resultMessage);
                     await ctx.Response.WriteAsync(JsonSerializer.Serialize(response, SerializerOptions));
                 }
             });

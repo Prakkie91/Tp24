@@ -1,7 +1,10 @@
 using AutoMapper;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Tp24.Api.Extensions;
 using Tp24.Api.Middlewares;
 using Tp24.Application;
+using Tp24.Common.Wrappers;
 using Tp24.Infrastructure;
 using Tp24.Infrastructure.DataAccess;
 using Tp24.Infrastructure.DataAccess.Seed;
@@ -10,7 +13,27 @@ var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddApplication();
     builder.Services.AddInfrastructure();
-    builder.Services.AddControllers();
+    builder.Services.AddControllers()
+        .AddFluentValidation()
+        .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState
+                .Where(e => e.Value.Errors.Count > 0)
+                .SelectMany(x => x.Value.Errors)
+                .Select(x => x.ErrorMessage)
+                .ToList();
+
+            var result = new Result
+            {
+                Succeeded = false,
+                Messages = errors
+            };
+
+            return new BadRequestObjectResult(result);
+        };
+    });
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.RegisterSwagger();
 }
@@ -44,7 +67,7 @@ app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();
 
-namespace MajorityAPI
+namespace Tp24API
 {
     public class Program
     {

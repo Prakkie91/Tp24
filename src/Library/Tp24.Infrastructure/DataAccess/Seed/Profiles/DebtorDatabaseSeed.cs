@@ -3,7 +3,7 @@ using Tp24.Infrastructure.DataAccess.Seed.Interfaces;
 
 namespace Tp24.Infrastructure.DataAccess.Seed.Profiles;
 
-public class DebtorDataModelSeed : IDatabaseSeed
+public class DebtorDatabaseSeed : IDatabaseSeed
 {
     public int Order => 2;
 
