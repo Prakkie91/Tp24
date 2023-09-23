@@ -6,7 +6,8 @@ This repository contains the TP24 Technical Test implementation, providing an HT
 
 ## **Limitations:**
 - Only supports the management of receivables.
-- Performance might vary based on the batch size.
+- **Performance** might vary based on the batch size.
+- **In-Memory DB** for convenience used in memory database needs to configure Ms Sql if used in production 
 - **Time Spent:** Approximately 3 hours.
 - **Limitations:** Prioritized main features; **lacks authentication or user management**.
 
