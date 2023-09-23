@@ -5,5 +5,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
+    <ItemGroup>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.6" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.6" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.6" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Tp24.Common\Tp24.Common.csproj" />
+        <ProjectReference Include="..\Tp24.Core\Tp24.Core.csproj" />
+    </ItemGroup>
 </Project>

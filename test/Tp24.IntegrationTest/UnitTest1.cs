@@ -1,4 +1,4 @@
-namespace Tp24.UnitTest;
+namespace Tp24.IntegrationTest;
 
 public class Tests
 {
